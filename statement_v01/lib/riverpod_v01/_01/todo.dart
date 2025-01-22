@@ -1,0 +1,24 @@
+import 'package:riverpod/riverpod.dart';
+
+class Todo {
+  final bool isCompleted;
+  final String description;
+
+  @override
+  String toString() {
+    return 'Todo{isCompleted: $isCompleted, description: $description}';
+  }
+
+  Todo({required this.isCompleted, required this.description});
+}
+
+// 코드를 분리해서 작성하는 습관은 좋지만 너무 많으면 과함
+// 우리들의 규칙. 모델클래스에 프로바이더를 함께 코드를 작성해서 파일을 줄이자.
+
+// 프로바이더 - 제공자
+// 비유 : 프로바이더 : 창고관리자(그냥 프로바이더는 1회 알바생) = 데이터 제공자의 역할
+// 프로바이더 안에 투두라는 객체가 들어있음
+
+final todoProvider = Provider<Todo>(
+  (ref) => Todo(isCompleted: true, description: '상태관리배우기'),
+);
