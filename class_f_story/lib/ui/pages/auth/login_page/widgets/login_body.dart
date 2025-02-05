@@ -1,18 +1,22 @@
 import 'package:class_f_story/_core/constatants/size.dart';
+import 'package:class_f_story/data/gvm/session_gvm.dart';
 import 'package:class_f_story/ui/widgets/custom_auth_text_form_field.dart';
 import 'package:class_f_story/ui/widgets/custom_elevated_button.dart';
 import 'package:class_f_story/ui/widgets/custom_logo.dart';
 import 'package:class_f_story/ui/widgets/custom_text_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class LoginBody extends StatelessWidget {
+class LoginBody extends ConsumerWidget {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
 
   LoginBody({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    // 창고 자체에 접근 -> 즉 뷰 모델 가지고 옴
+    SessionGVM gvm = ref.read(sessionProvider.notifier);
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: ListView(
@@ -31,8 +35,10 @@ class LoginBody extends StatelessWidget {
           CustomElevatedButton(
             text: '로그인',
             click: () {
-              String temp1 = _usernameController.text.trim();
-              String temp2 = _passwordController.text.trim();
+              gvm.login(
+                _usernameController.text.trim(),
+                _passwordController.text.trim(),
+              );
               // TODO - 로그인 처리
               // 뷰 모델에 있는 기능인 로그인 행위를 만들어 줄 예정
             },
