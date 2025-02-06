@@ -232,6 +232,27 @@ class SessionGVM extends Notifier<SessionUser> {
   }
 
   // 로그아웃 행위
+  // 0. view model에서 예외 처리
+  // 1. 디바이스 기기에 토큰 삭제
+  // 2-1. 로그인 화면에서 상태관리를 sessionUser 나의 아이디 이메일 정보들을 여러화면에서 공통으로 사용하고 있음
+  // 2-2. 나의 상태 갱신 (SessionUser())
+  // 3. dio 전역 객체 헤더 토큰 제거 --> 빈 문자열로
+  // 4. 화면 모두 파괴하고 LoginPage 로 이동
+  Future<void> logout() async {
+    try {
+      // 1.
+      await secureStorage.delete(key: "accessToken");
+      // 2.
+      state = SessionUser(
+          id: null, username: null, accessToken: null, isLogin: false);
+      // 3.
+      dio.options.headers["Authorization"] = '';
+      // 4.
+      Navigator.pushNamedAndRemoveUntil(mContext, '/login', (route) => false);
+    } catch (e, stackStrace) {
+      ExceptionHandler.handleException('로그아웃 중 오류 발생', stackStrace);
+    }
+  }
 
   // 로직 정리
   // 0. 예외 처리
