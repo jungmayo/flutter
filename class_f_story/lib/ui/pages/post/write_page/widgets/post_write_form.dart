@@ -1,4 +1,5 @@
 import 'package:class_f_story/_core/constatants/size.dart';
+import 'package:class_f_story/data/_vm/post_write_view_model.dart';
 import 'package:class_f_story/ui/widgets/custom_elevated_button.dart';
 import 'package:class_f_story/ui/widgets/custom_text_area.dart';
 import 'package:class_f_story/ui/widgets/custom_text_form_field.dart';
@@ -19,6 +20,14 @@ class PostWriteForm extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     //post_write_view_model 만드는게 핵심
 
+    // 뷰 모델 상태를 구독
+    // 뷰 모델 행위를 사용해야 한다.
+    // (레코드 타입) // (title,content,isWriteCompleted)
+    final data = ref.watch(postWriteViewModelProvider);
+
+    // 뷰 모델 자체를 들고옴
+    final vm = ref.read(postWriteViewModelProvider.notifier);
+
     return Form(
       key: _formKey,
       child: ListView(
@@ -36,7 +45,17 @@ class PostWriteForm extends ConsumerWidget {
           const SizedBox(height: largeGap),
           CustomElevatedButton(
             text: '글쓰기',
-            click: () {},
+            click: () {
+              vm.createPost(
+                title: _titleController.text.trim(),
+                content: _contentController.text.trim(),
+              );
+              // if(data.$3 == true){
+              //   // 페이지 이동 처리
+              //   _titleController.text.clear();
+              //   _contentController.text.clear();
+              // }
+            },
           )
         ],
       ),
